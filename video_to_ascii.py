@@ -122,19 +122,23 @@ def process_init(*args):
     is_video = args[7]
 
 if __name__ == "__main__":
-    width, height = 800, 1422
-    font_size = 4  # Some fucky stuff happens at 3
-    rgb = (0, 0, 255)
+    # Change stuff here, enable
+    width, height = 800, 1422  # Height, Width
+    font_size = 4  # Some fucky stuff happens at 3, so don't set it to 3.
+    rgb = (0, 0, 255)  # RGB values of ascii
+    is_video = True  # Set to False if you want to use picture instead
+    pic_path = "Examples/Zergling.jpg"  # Name of pic file
+    pic_output = "results/ascii_image"  # Output name pic
+    vid_path = "Examples/20181124_135911.mp4"  # Name of video file
+    vid_output = "results/video"  # Output name video
+    processes = 10  # How many processes to use when rendering video
+
     font = 'fonts/zig_monospace.ttf'
-    is_video = True
-    processes = 10
     ascii_dict, size_of_char = Asciimap()
     print(f"Initiaizing {processes} processes")
     p = multiprocessing.Pool(processes, initializer=process_init, initargs=(width, height, font_size, font, size_of_char, rgb, ascii_dict, is_video))
     print("Initialization completed")
     if is_video:
-        vid_path = "Examples/20181124_135911.mp4"
-        vid_output = "results/video"
         cap = cv2.VideoCapture(vid_path)
         fps = cap.get(cv2.CAP_PROP_FPS)
         amount_of_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -143,8 +147,6 @@ if __name__ == "__main__":
         fourcc = cv2.VideoWriter_fourcc(*"DIVX")
         video = cv2.VideoWriter(vid_output + ".mp4", fourcc, fps, (height, width))  # FPS is equal to source
     else:
-        pic_path = "Examples/Zergling.jpg"
-        pic_output = "results/ascii_image"
         cap = cv2.imread(pic_path)
         amount_of_frames = 1
 
